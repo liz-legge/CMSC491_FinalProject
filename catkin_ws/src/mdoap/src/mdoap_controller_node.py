@@ -32,18 +32,29 @@ class MDOAPControllerNode:
             # - -> offset to right in lane
             for projected in detections_msg.list:
                 # ~0.23 is the lane width
-                if projected.distance < minDist and abs(projected.location.y) < 0.15:
-                    minDist = projected.distance
-                    y = projected.location.y
-                    # + y -> obstacle to the left, drive right (set offset negative)
-                    # - y -> obstacle to the right, drive left (set offset positive)
-                    if y > 0:
-                        offset = (-0.15 - y)*1.5
-                    else:
-                        offset = (0.15 - y)*1.5
-            #Hijack the param for seting offset of the lane
+                
+                # goes through each object- duckie or cone
+                # add if statement here to handle duckie different than cone
+                if projected.type.type == ObstacleType.DUCKIE:
+                    stop = WheelsCmdStamped()
+                    stop.header = bool_msg.header
+                    stop.vel_left = 0.0
+                    stop.vel_right = 0.0
+                    #stop while the object is still there, and move when the coast is clear
+                else:           
+                    if projected.distance < minDist and abs(projected.location.y) < 0.15:
+                        minDist = projected.distance
+                        y = projected.location.y
+                        # + y -> obstacle to the left, drive right (set offset negative)
+                        # - y -> obstacle to the right, drive left (set offset positive)
+                        if y > 0:
+                            offset = (-0.15 - y)*1.5
+                        else:
+                            offset = (0.15 - y)*1.5
+                    # add else here
+                #Hijack the param for seting offset of the lane
 
-            rospy.set_param("lane_controller_node/d_offset", offset)
+                rospy.set_param("lane_controller_node/d_offset", offset)
         else:
             #Reset offset of lane to 0
             rospy.set_param("lane_controller_node/d_offset", 0.0)
