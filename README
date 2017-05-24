@@ -1,0 +1,8 @@
+CMSC 491 Final Project- Mini Autonomous Vehicles
+
+There is a lot of base code from the original Duckiebot project. The files that we modified were:
+mdoap_controller_node.py
+obstacle_safety_node.py
+static_object_detector_node.py
+
+Please take a look at this guide on how to test the Duckiebot: http://duckietown.mit.edu/media/pdfs/1UgCuAcE0WJKja-y0WTXR8pFo9f3srQ4TNtAiX8Nhp08.pdf
